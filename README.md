@@ -51,9 +51,9 @@ CALENDAR_SECRET_KEY=sua_chave_secreta_calendar
 SUBJECTS_SECRET_KEY=sua_chave_secreta_subjects
 
 # Credenciais de super usuário padrão
-DJANGO_SUPERUSER_USERNAME= seu_username
-DJANGO_SUPERUSER_PASSWORD= sua_senha
-DJANGO_SUPERUSER_EMAIL= seu_email
+DJANGO_SUPERUSER_USERNAME=seu_username
+DJANGO_SUPERUSER_PASSWORD=sua_senha
+DJANGO_SUPERUSER_EMAIL=seu_email
 ```
 
 ### 3. Suba os containers
