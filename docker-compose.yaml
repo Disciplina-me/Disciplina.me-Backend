@@ -28,9 +28,13 @@ services:
       DB_USER: ${DB_USER}
       DB_NAME: ${AUTH_DB_NAME}
       DB_HOST: ${DB_HOST}
+      DJANGO_SUPERUSER_USERNAME: ${DJANGO_SUPERUSER_USERNAME}
+      DJANGO_SUPERUSER_PASSWORD: ${DJANGO_SUPERUSER_PASSWORD}
+      DJANGO_SUPERUSER_EMAIL: ${DJANGO_SUPERUSER_EMAIL}
     command: >
       sh -c "sleep 3 &&
              python manage.py migrate &&
+             python manage.py createsuperuser --noinput || true &&
              python manage.py runserver 0.0.0.0:8000"
 
   calendar-service:
@@ -48,9 +52,13 @@ services:
       DB_USER: ${DB_USER}
       DB_NAME: ${CALENDAR_DB_NAME}
       DB_HOST: ${DB_HOST}
+      DJANGO_SUPERUSER_USERNAME: ${DJANGO_SUPERUSER_USERNAME}
+      DJANGO_SUPERUSER_PASSWORD: ${DJANGO_SUPERUSER_PASSWORD}
+      DJANGO_SUPERUSER_EMAIL: ${DJANGO_SUPERUSER_EMAIL}
     command: >
       sh -c "sleep 3 &&
              python manage.py migrate &&
+             python manage.py createsuperuser --noinput || true &&
              python manage.py runserver 0.0.0.0:8000"
 
   subjects-service:
@@ -68,9 +76,13 @@ services:
       DB_USER: ${DB_USER}
       DB_NAME: ${SUBJECTS_DB_NAME}
       DB_HOST: ${DB_HOST}
+      DJANGO_SUPERUSER_USERNAME: ${DJANGO_SUPERUSER_USERNAME}
+      DJANGO_SUPERUSER_PASSWORD: ${DJANGO_SUPERUSER_PASSWORD}
+      DJANGO_SUPERUSER_EMAIL: ${DJANGO_SUPERUSER_EMAIL}
     command: >
       sh -c "sleep 3 &&
              python manage.py migrate &&
+             python manage.py createsuperuser --noinput || true &&
              python manage.py runserver 0.0.0.0:8000"
 
 volumes:
