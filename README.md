@@ -1,153 +1,102 @@
 # Disciplina.me
 
-Disciplina.me é um assistente acadêmico que ajuda a registrar aulas puladas, calcular a média de notas e muito mais para melhorar o desempenho dos alunos.
+Disciplina.me é um assistente acadêmico projetado para ajudar alunos a gerenciarem seu desempenho, registrando aulas, calculando médias e organizando o calendário acadêmico.
 
-## 🛠️ Stack Tecnológico
+O projeto foi reestruturado em uma **arquitetura de microserviços** para garantir escalabilidade e separação de responsabilidades.
 
-- **Linguagem:** Python
-- **Framework:** Django
-- **Banco de Dados:** SQLite (padrão do Django)
+## 🏗️ Arquitetura e Stack
+
+O sistema é composto por três microserviços principais, todos desenvolvidos em **Python** com **Django**:
+
+- **Auth Service:** Gerenciamento de usuários e autenticação (Porta 8001).
+- **Calendar Service:** Gestão de calendários e eventos acadêmicos (Porta 8002).
+- **Subjects Service:** Registro de matérias, notas e faltas (Porta 8003).
+
+### Tecnologias:
+- **Linguagens/Frameworks:** Python 3, Django
+- **Banco de Dados:** PostgreSQL (uma base para cada serviço)
+- **Containerização:** Docker & Docker Compose
 
 ## 📋 Pré-requisitos
 
 Antes de começar, certifique-se de ter instalado:
-- Python 3.8 ou superior
-- pip (gerenciador de pacotes do Python)
+- **Docker**
+- **Docker Compose**
 
-Você pode verificar as versões instaladas com:
-```bash
-python --version
-pip --version
-```
-
-## 🚀 Instalação
+## 🚀 Como Rodar o Projeto
 
 ### 1. Clone o repositório
-
 ```bash
 git clone https://github.com/juanzeen/Disciplina.me.git
 cd Disciplina.me
 ```
 
-### 2. Crie um ambiente virtual
+### 2. Configure as Variáveis de Ambiente
+Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis (exemplo):
 
-É recomendado usar um ambiente virtual para isolar as dependências do projeto.
+```env
+# Banco de Dados
+DB_USER=seu_usuario
+DB_PASSWORD=sua_senha
+DB_HOST=db
 
-**No Linux/macOS:**
-```bash
-python -m venv venv
-source venv/bin/activate
+# Nomes dos Bancos de Dados
+AUTH_DB_NAME=disciplina_me_auth
+CALENDAR_DB_NAME=disciplina_me_calendar
+SUBJECTS_DB_NAME=disciplina_me_subjects
+
+# Secret Keys para cada serviço
+AUTH_SECRET_KEY=sua_chave_secreta_auth
+CALENDAR_SECRET_KEY=sua_chave_secreta_calendar
+SUBJECTS_SECRET_KEY=sua_chave_secreta_subjects
 ```
 
-**No Windows:**
-```bash
-python -m venv venv
-venv\Scripts\activate
-```
-
-### 3. Instale as dependências
-
-Instale todas as dependências com:
+### 3. Suba os containers
+Utilize o Docker Compose para construir e iniciar todos os serviços:
 
 ```bash
-pip install -r requirements.txt
+docker-compose up --build
 ```
 
-### 4. Configure o banco de dados
+Isso irá:
+1. Iniciar o banco de dados PostgreSQL.
+2. Criar os bancos de dados necessários através do script `init-db.sh`.
+3. Rodar as migrações em cada microserviço.
+4. Iniciar os servidores de desenvolvimento em suas respectivas portas.
 
-Execute as migrações do Django para configurar o banco de dados:
+## 🔗 Acesso aos Serviços
 
+- **Auth Service:** [http://localhost:8001](http://localhost:8001)
+- **Calendar Service:** [http://localhost:8002](http://localhost:8002)
+- **Subjects Service:** [http://localhost:8003](http://localhost:8003)
+
+Cada serviço possui seu próprio painel administrativo acessível via `/admin`.
+
+## 📝 Comandos Úteis (Docker)
+
+### Criar superusuário em um serviço específico
+Para acessar o admin, você precisará de um superusuário em cada serviço:
 ```bash
-python manage.py migrate
+docker-compose exec auth-service python manage.py createsuperuser
+docker-compose exec calendar-service python manage.py createsuperuser
+docker-compose exec subjects-service python manage.py createsuperuser
 ```
-
-Este comando criará as tabelas necessárias no banco de dados SQLite.
-
-### 5. Crie um superusuário (admin)
-
-Para acessar o painel administrativo do Django, crie um superusuário:
-
-```bash
-python manage.py createsuperuser
-```
-
-Você será solicitado a informar:
-- Nome de usuário
-- Email
-- Senha
-
-## ▶️ Executando o projeto
-
-### Inicie o servidor de desenvolvimento
-
-```bash
-python manage.py runserver
-```
-
-O servidor estará disponível em: **http://127.0.0.1:8000/**
-
-Se desejar rodar em uma porta específica:
-```bash
-python manage.py runserver 8080
-```
-
-### Acesse o painel administrativo
-
-Navegue até **http://127.0.0.1:8000/admin** e faça login com as credenciais do superusuário criado anteriormente.
-
-## 📝 Comandos úteis do Django
 
 ### Criar novas migrações
-
-Após modificar os modelos, crie uma nova migração:
 ```bash
-python manage.py makemigrations
+docker-compose exec <nome-do-servico> python manage.py makemigrations
 ```
 
-### Aplicar migrações
-
+### Executar novas migrações
 ```bash
-python manage.py migrate
+docker-compose exec <nome-do-servico> python manage.py migrate
 ```
 
-### Criar um novo app Django
-
+### Ver Logs
 ```bash
-python manage.py startapp nome_do_app
-```
-
-### Shell interativo
-
-Para interagir com o banco de dados via shell Python:
-```bash
-python manage.py shell
-```
-
-### Resetar o banco de dados
-
-Se precisar recriar o banco de dados do zero:
-```bash
-python manage.py flush
-```
-
-## 📦 Desativar o ambiente virtual
-
-Quando terminar de trabalhar no projeto:
-
-**No Linux/macOS:**
-```bash
-deactivate
-```
-
-**No Windows:**
-```bash
-deactivate
+docker-compose logs -f
 ```
 
 ## 📞 Suporte
 
-Para mais informações sobre Django, visite a [documentação oficial](https://docs.djangoproject.com/).
-
----
-
-**Desenvolvido com ❤️**
+Para mais informações sobre a stack utilizada, visite a [documentação oficial do Django](https://docs.djangoproject.com/) e do [Docker](https://docs.docker.com/).
