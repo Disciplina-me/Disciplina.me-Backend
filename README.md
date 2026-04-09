@@ -47,13 +47,8 @@ venv\Scripts\activate
 
 ### 3. Instale as dependências
 
-Primeiro, instale o Django e outras dependências necessárias:
+Instale todas as dependências com:
 
-```bash
-pip install django
-```
-
-Se houver um arquivo `requirements.txt`, instale todas as dependências com:
 ```bash
 pip install -r requirements.txt
 ```
