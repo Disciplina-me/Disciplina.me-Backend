@@ -1,4 +1,5 @@
 from rest_framework import generics
+from rest_framework.response import Response
 from .serializers import ActivitySerializer
 from . import services
 from . import selectors
@@ -33,4 +34,4 @@ class ActivityRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 
     #Faz um DELETE automaticamente
     def perform_destroy(self, instance):
-      services.activity_delete(instance=instance.id)
+      services.activity_delete(instance=instance)

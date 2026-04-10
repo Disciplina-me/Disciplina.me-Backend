@@ -12,5 +12,5 @@ def activity_update(*, instance:Activity, validated_data:dict) -> Activity:
   return instance
 
 
-def activity_delete(*, instance: Activity) -> Activity:
+def activity_delete(*, instance: Activity) -> None:
   instance.delete()
