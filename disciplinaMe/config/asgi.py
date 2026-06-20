@@ -1,5 +1,5 @@
 """
-ASGI config for disciplinaMeCalendar project.
+ASGI config for disciplinaMe project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 

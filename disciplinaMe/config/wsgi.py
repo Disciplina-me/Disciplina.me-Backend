@@ -1,5 +1,5 @@
 """
-WSGI config for disciplinaMeSubjects project.
+WSGI config for disciplinaMe project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
