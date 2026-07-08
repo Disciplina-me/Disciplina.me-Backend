@@ -28,10 +28,11 @@ class Manager(BaseUserManager):
 class User(AbstractUser):
   id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
   username = None
-  email = models.EmailField(unique=True)
-  phone = models.CharField(max_length=11, blank=True, null=True)
+  email = models.EmailField(max_length=254, unique=True)
   age = models.PositiveIntegerField()
-  institution_name = models.CharField(max_length=100)
+  education = models.CharField(max_length=100)
+  institution_name = models.CharField(max_length=150, null=True)
+  cr = models.FloatField(null=True)
   USERNAME_FIELD = 'email'
   REQUIRED_FIELDS = ['age', 'institution_name']
   objects = Manager()
