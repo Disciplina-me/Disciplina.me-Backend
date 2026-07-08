@@ -13,22 +13,21 @@ services:
       POSTGRES_DB: postgres
     restart: always
 
-  auth-service:
-    container_name: disciplina_me_auth
-    build: ./disciplinaMeAuth
+  app:
+    container_name: disciplina_me
+    build: ./disciplinaMe
     volumes:
-      - ./disciplinaMeAuth:/app
+      - ./disciplinaMe:/app
     ports:
-      - "8001:8000"
+      - "8000:8000"
     depends_on:
       - db
     environment:
-      SECRET_KEY: ${AUTH_SECRET_KEY}
+      SECRET_KEY: ${SECRET_KEY}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_USER: ${DB_USER}
-      DB_NAME: ${AUTH_DB_NAME}
+      DB_NAME: ${DB_NAME}
       DB_HOST: ${DB_HOST}
-      DJANGO_SUPERUSER_USERNAME: ${DJANGO_SUPERUSER_USERNAME}
       DJANGO_SUPERUSER_PASSWORD: ${DJANGO_SUPERUSER_PASSWORD}
       DJANGO_SUPERUSER_EMAIL: ${DJANGO_SUPERUSER_EMAIL}
       ALLOWED_HOSTS: ${ALLOWED_HOSTS}
@@ -37,56 +36,5 @@ services:
              python manage.py migrate &&
              python manage.py createsuperuser --noinput || true &&
              python manage.py runserver 0.0.0.0:8000"
-
-  calendar-service:
-    container_name: disciplina_me_calendar
-    build: ./disciplinaMeCalendar
-    volumes:
-      - ./disciplinaMeCalendar:/app
-    ports:
-      - "8002:8000"
-    depends_on:
-      - db
-    environment:
-      SECRET_KEY: ${CALENDAR_SECRET_KEY}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_USER: ${DB_USER}
-      DB_NAME: ${CALENDAR_DB_NAME}
-      DB_HOST: ${DB_HOST}
-      DJANGO_SUPERUSER_USERNAME: ${DJANGO_SUPERUSER_USERNAME}
-      DJANGO_SUPERUSER_PASSWORD: ${DJANGO_SUPERUSER_PASSWORD}
-      DJANGO_SUPERUSER_EMAIL: ${DJANGO_SUPERUSER_EMAIL}
-      ALLOWED_HOSTS: ${ALLOWED_HOSTS}
-    command: >
-      sh -c "sleep 3 &&
-             python manage.py migrate &&
-             python manage.py createsuperuser --noinput || true &&
-             python manage.py runserver 0.0.0.0:8000"
-
-  subjects-service:
-    container_name: disciplina_me_subjects
-    build: ./disciplinaMeSubjects
-    volumes:
-      - ./disciplinaMeSubjects:/app
-    ports:
-      - "8003:8000"
-    depends_on:
-      - db
-    environment:
-      SECRET_KEY: ${SUBJECTS_SECRET_KEY}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_USER: ${DB_USER}
-      DB_NAME: ${SUBJECTS_DB_NAME}
-      DB_HOST: ${DB_HOST}
-      DJANGO_SUPERUSER_USERNAME: ${DJANGO_SUPERUSER_USERNAME}
-      DJANGO_SUPERUSER_PASSWORD: ${DJANGO_SUPERUSER_PASSWORD}
-      DJANGO_SUPERUSER_EMAIL: ${DJANGO_SUPERUSER_EMAIL}
-      ALLOWED_HOSTS: ${ALLOWED_HOSTS}
-    command: >
-      sh -c "sleep 3 &&
-             python manage.py migrate &&
-             python manage.py createsuperuser --noinput || true &&
-             python manage.py runserver 0.0.0.0:8000"
-
 volumes:
   postgres_data:

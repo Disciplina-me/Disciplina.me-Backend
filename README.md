@@ -2,23 +2,21 @@
 
 Disciplina.me é um assistente acadêmico projetado para ajudar alunos a gerenciarem seu desempenho, registrando aulas, calculando médias e organizando o calendário acadêmico.
 
-O projeto foi reestruturado em uma **arquitetura de microserviços** para garantir escalabilidade e separação de responsabilidades.
-
 ## 🏗️ Arquitetura e Stack
 
-O sistema é composto por três microserviços principais, todos desenvolvidos em **Python** com **Django**:
+O sistema agora opera como um único projeto Django estruturado em módulos independentes (na pasta `apps/`):
 
-- **Auth Service:** Gerenciamento de usuários e autenticação (Porta 8001).
-- **Calendar Service:** Gestão de calendários e eventos acadêmicos (Porta 8002).
-- **Subjects Service:** Registro de matérias, notas e faltas (Porta 8003).
+- **Auth / Usuários:** Gerenciamento de usuários, autenticação e perfis customizados.
+- **Calendar:** Gestão de calendários e eventos acadêmicos.
+- **Subjects:** Registro de matérias, notas e faltas.
 
 ### Tecnologias:
-- **Linguagens/Frameworks:** Python 3, Django
-- **Banco de Dados:** PostgreSQL (uma base para cada serviço)
+- **Linguagens/Frameworks:** Python 3, Django, Django Rest Framework (DRF)
+- **Banco de Dados:** PostgreSQL (Base de dados única unificada)
 - **Containerização:** Docker & Docker Compose
 
 ## 📋 Pré-requisitos
-
+cace
 Antes de começar, certifique-se de ter instalado:
 - **Docker**
 - **Docker Compose**
@@ -27,81 +25,48 @@ Antes de começar, certifique-se de ter instalado:
 
 ### 1. Clone o repositório
 ```bash
-git clone https://github.com/juanzeen/Disciplina.me.git
+git clone [https://github.com/juanzeen/Disciplina.me.git](https://github.com/juanzeen/Disciplina.me.git)
 cd Disciplina.me
 ```
 
-### 2. Configure as Variáveis de Ambiente
-Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis (exemplo):
-
-```env
-# Banco de Dados
+### 2. Configure as variáveis de ambiente
+```bash
 DB_USER=seu_usuario
 DB_PASSWORD=sua_senha
 DB_HOST=db
+DB_NAME=disciplina_me_db
+SECRET_KEY=sua_chave_secreta_django
+ALLOWED_HOSTS="localhost,127.0.0.1"
 
-# Nomes dos Bancos de Dados
-AUTH_DB_NAME=disciplina_me_auth
-CALENDAR_DB_NAME=disciplina_me_calendar
-SUBJECTS_DB_NAME=disciplina_me_subjects
-
-# Secret Keys para cada serviço
-AUTH_SECRET_KEY=sua_chave_secreta_auth
-CALENDAR_SECRET_KEY=sua_chave_secreta_calendar
-SUBJECTS_SECRET_KEY=sua_chave_secreta_subjects
-
-# Credenciais de super usuário padrão
-DJANGO_SUPERUSER_USERNAME=seu_username
+# Credenciais de super usuário padrão (Opcional, útil para scripts de inicialização)
+DJANGO_SUPERUSER_EMAIL=seu_email@exemplo.com
 DJANGO_SUPERUSER_PASSWORD=sua_senha
-DJANGO_SUPERUSER_EMAIL=seu_email
 ```
 
 ### 3. Suba os containers
-Utilize o Docker Compose para construir e iniciar todos os serviços:
+`docker compose up --build`
 
+1. Esse comando inicia o banco de dados PostgreSQL;
+2. Aplica as migracões automaticamente;
+3. Inicia o servidor de dev na porta 8000
+
+### 4. Acessando o sistema
+- API http://localhost:8080
+- Django Admin http://localhost:8080/admin
+
+### 5. Comandos utilitários do Docker
+
+#### Criando super user
+`docker compose exec web python manage.py createsuperuser`
+
+#### Criando novas migracões
 ```bash
-docker-compose up --build
+docker-compose exec web python manage.py makemigrations
+docker-compose exec web python manage.py makemigrations calendar
 ```
 
-Isso irá:
-1. Iniciar o banco de dados PostgreSQL.
-2. Criar os bancos de dados necessários através do script `init-db.sh`.
-3. Rodar as migrações em cada microserviço.
-4. Iniciar os servidores de desenvolvimento em suas respectivas portas.
+#### Executando migracoes
+`docker compose exec web python manage.py migrate`
 
-## 🔗 Acesso aos Serviços
-
-- **Auth Service:** [http://localhost:8001](http://localhost:8001)
-- **Calendar Service:** [http://localhost:8002](http://localhost:8002)
-- **Subjects Service:** [http://localhost:8003](http://localhost:8003)
-
-Cada serviço possui seu próprio painel administrativo acessível via `/admin`.
-
-## 📝 Comandos Úteis (Docker)
-
-### Criar superusuário em um serviço específico
-Para acessar o admin, você precisará de um superusuário em cada serviço:
-```bash
-docker-compose exec auth-service python manage.py createsuperuser
-docker-compose exec calendar-service python manage.py createsuperuser
-docker-compose exec subjects-service python manage.py createsuperuser
-```
-
-### Criar novas migrações
-```bash
-docker-compose exec <nome-do-servico> python manage.py makemigrations
-```
-
-### Executar novas migrações
-```bash
-docker-compose exec <nome-do-servico> python manage.py migrate
-```
-
-### Ver Logs
-```bash
-docker-compose logs -f
-```
-
-## 📞 Suporte
-
-Para mais informações sobre a stack utilizada, visite a [documentação oficial do Django](https://docs.djangoproject.com/) e do [Docker](https://docs.docker.com/).
+#### Visualizar logs
+`docker compose logs -f`
